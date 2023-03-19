@@ -1,0 +1,75 @@
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>SaleProject</title>
+		<style type="text/css">
+		</style>
+		<link rel="stylesheet" type="text/css" href="SaleProjectStyle.css">
+		<script type="text/javascript" src="cekformproduct.js"></script>
+	</head>
+	<body>
+		<div class="title">
+			<br>
+			Sale<span style="color: #4887E4">Project</span> <br>
+		</div>
+
+		<?php include("userlogin.php"); ?>
+		<?php $activeid = $_GET['active_ID']; ?>
+
+		<div class="navigation_bar">
+			<ul>
+				<li><a href="catalog.php?active_ID=<?php echo $activeid; ?>">Catalog</a></li>
+				<li><a href="yourproduct.html?active_ID=<?php echo $activeid; ?>">Your Product</a></li>
+				<li><a href="addproduct.html?active_ID=<?php echo $activeid; ?>">Add Product</a></li>
+				<li><a href="sales.php?active_ID=<?php echo $activeid; ?>">Sales</a></li>
+				<li><a href="purchases.php?active_ID=<?php echo $activeid; ?>">Purchases</a></li>
+			</ul>
+		</div>
+
+		<div class="submenu_header">
+			<br>
+			Please update your product here
+			<hr>
+		</div>
+
+		<?php
+
+			$servername = "localhost";
+			$dbusername = "root";
+			$dbpassword = "";
+			$dbname = "tubeswbd1";
+
+			$con = new mysqli($servername, $dbusername, $dbpassword, $dbname);
+
+			$item_ID = $_GET['item_ID'];
+
+			$sql = "SELECT item_ID, item_name, item_desc, item_price, item_image, item_owner FROM item WHERE item_ID='$item_ID'";
+			$result = mysqli_query($con, $sql);
+			$row = mysqli_fetch_array($result);
+		?>
+
+		<div class="product">
+			<form name = "addproduct" action="editproduct.php?item_ID=<?php echo $item_ID;?>&active_ID=<?php echo $activeid; ?>" method="post" onsubmit="return validasiedit();" enctype="musltipart/form-data">
+				<small>Name</small> <br>
+				<input type="text" name="item_name" value="<?php echo $row['item_name']; ?>">
+				<br>
+				<br>
+				<small>Description (max 200 chars)</small> <br>
+				<textarea name="item_desc" cols="105" rows="7"><?php echo $row['item_desc']; ?></textarea>
+				<br>
+				<br>
+				<small>Price (IDR)</small> <br>
+				<input type="text" name="item_price" id="item_price" value="<?php echo $row['item_price']; ?>">
+				<br>
+				<br>
+				<!-- Photo <br>
+				<input type="file" name="item_image"> -->
+				<br>
+				<br>
+				<br>		
+				<input type="submit" value="CANCEL" onclick="location.href='yourproduct.html?active_ID=<?php echo $activeid; ?>'">
+				<input type="submit" value="UPDATE" style="margin-right: 30px"> <br>
+			</form>
+		</div>
+	</body>
+</html>
